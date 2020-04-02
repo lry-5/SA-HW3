@@ -1,14 +1,17 @@
 <template>
   <div id="student-table">
     <p v-if="students.length < 1" class="empty-table">No students</p>
-    <table v-else>
+    <table v-else-if="op!=='0'">
       <thead>
         <tr>
-          <th>Student name</th>
-          <th>Student sex</th>
-          <th>Actions</th>
+          <th>Name</th>
+          <th>Sex</th>
+          <th>Birthday</th>
+          <th>BirthPlace</th>
+          <th>Department</th>
+          <th v-if="op === '3'||op === '4'">Actions</th>
         </tr>
-        <p>op:{{op}}</p>
+        <!-- <p>op:{{op}}</p> -->
       </thead>
       <tbody>
         <tr v-for="student in students" v-bind:key="student.id">
@@ -21,15 +24,32 @@
           </td>
           <td v-else>{{student.sex}}</td>
           <td v-if="editing === student.id">
+            <input type="text" v-model="student.birthday" />
+          </td>
+          <td v-else>{{student.birthday}}</td>
+          <td v-if="editing === student.id">
+            <input type="text" v-model="student.birthPlace" />
+          </td>
+          <td v-else>{{student.birthPlace}}</td>
+          <td v-if="editing === student.id">
+            <input type="text" v-model="student.dept" />
+          </td>
+          <td v-else>{{student.dept}}</td>
+          
+          <td v-if="editing === student.id">
             <button v-on:click="editStudent(student)">Save</button>
             <button class="muted-button" v-on:click="cancelEdit(student)">Cancel</button>
           </td>
           <td v-else>
+            <button v-if="op==='4'" v-on:click="editMode(student)">Edit</button>
+            <button v-if="op==='3'" v-on:click="$emit('delete:student', student.id)">Delete</button>
+          </td>
+          <!-- <td v-else>
             <button v-on:click="editMode(student)">Edit</button>
             <button v-on:click="$emit('delete:student', student.id)">Delete</button>
-          </td>
+          </td> -->
         </tr>   
-           
+        
       </tbody>
     </table>
   </div>
@@ -39,7 +59,7 @@
 export default {
   name: "student-table",
   props: {
-    op:Number,
+    op:String,
     students: Array
   },
   data() {

@@ -1,84 +1,85 @@
 <template>
-  <div id="student-form">
-    <form v-on:submit.prevent="handleSubmit">
+  <div idTmp="student-form">
+    <form v-on:submit.prevent="handleVerify">
       <!-- <label>Student Name</label> -->
-      <table>
-        <tr v-if="op===1" key="1">
-          <td>
-            <input
-              placeholder="姓名"
-              type="text"
-              v-bind:class="{ 'has-error': submitting && invalidName }"
-              v-model="student.name"
-              v-on:focus="clearStatus"
-              v-on:keypress="clearStatus"
-            />
-          </td>
-          <td>
-            <input
-              placeholder="性别"
-              type="text"
-              v-bind:class="{ 'has-error': submitting && invalidSex }"
-              v-model="student.sex"
-              v-on:focus="clearStatus"
-            />
-          </td>
-          <td>
-            <input
-              placeholder="生日"
-              type="text"
-              v-bind:class="{ 'has-error': submitting && invalidBirthday }"
-              v-model="student.birthday"
-              v-on:focus="clearStatus"
-              v-on:keypress="clearStatus"
-            />
-          </td>
-        </tr>
-        <tr v-else key="2">
-          <td>
-            <input
-              placeholder="籍贯"
-              type="text"
-              v-bind:class="{ 'has-error': submitting && invalidBirthplace }"
-              v-model="student.birthplace"
-              v-on:focus="clearStatus"
-              v-on:keypress="clearStatus"
-            />
-          </td>
-          <td>
-            <input
-              placeholder="系别"
-              type="text"
-              v-bind:class="{ 'has-error': submitting && invalidDept }"
-              v-model="student.dept"
-              v-on:focus="clearStatus"
-              v-on:keypress="clearStatus"
-            />
-          </td>
-        </tr>
-        <tr key="3">
-          <p v-if="error && submitting" class="error-message">❗Please fill out all required fields</p>
-          <p v-if="success" class="success-message">✅ Student successfully added</p>
+      <table v-if="op!=='0'">
+        <div v-if="op==='1'">
+          <tr>
+            <td>
+              <input
+                placeholder="Name"
+                type="text"
+                v-bind:class="{ 'has-error': submitting && invalidName }"
+                v-model="student.name"
+                v-on:focus="clearStatus"
+                v-on:keypress="clearStatus"
+              />
+            </td>
+            <td>
+              <input
+                placeholder="Sex"
+                type="text"
+                v-bind:class="{ 'has-error': submitting && invalidSex }"
+                v-model="student.sex"
+                v-on:focus="clearStatus"
+              />
+            </td>
+            <td>
+              <input
+                placeholder="Birthday"
+                type="text"
+                v-bind:class="{ 'has-error': submitting && invalidBirthday }"
+                v-model="student.birthday"
+                v-on:focus="clearStatus"
+                v-on:keypress="clearStatus"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <input
+                placeholder="BirthPlace"
+                type="text"
+                v-bind:class="{ 'has-error': submitting && invalidBirthPlace }"
+                v-model="student.birthPlace"
+                v-on:focus="clearStatus"
+                v-on:keypress="clearStatus"
+              />
+            </td>
+            <td>
+              <input
+                placeholder="Department"
+                type="text"
+                v-bind:class="{ 'has-error': submitting && invalidDept }"
+                v-model="student.dept"
+                v-on:focus="clearStatus"
+                v-on:keypress="clearStatus"
+              />
+            </td>
+          </tr>
+          <tr>
+            <p v-if="error && submitting" class="error-message">❗Please fill out all required fields</p>
+            <p v-if="success" class="success-message">✅ Student successfully added</p>
+          </tr>
+        </div>
 
-        </tr>
-        <tr key="4">
-          <td v-if="op!==0">
-            <input value=""
-              placeholder="学号"
-              type="text"              
-              v-model="id"
+        <tr>
+          <td v-if="op!=='1'">
+            <input
+              value
+              placeholder="Sno"
+              type="text"
+              v-model="idTmp"
               v-on:focus="clearStatus"
               v-on:keypress="clearStatus"
             />
-          </td>   
-          <p v-else></p>       
-          <td>
-            <button>确定</button>
           </td>
-          <p>id:{{id}},op in form:{{op}}</p>
+          <td>
+            <button>Verify</button>
+          </td>
+          <p>idTmp:{{idTmp}},op in form:{{op}}</p>
         </tr>
       </table>
-     
     </form>
   </div>
 </template>
@@ -87,16 +88,16 @@
 export default {
   name: "student-form",
   props: {
-    op: Number
+    op: String
   },
   computed: {
-    needId() {
-      return this.op !== 0&& this.op !== 1;
-    },
+    // needId() {
+    //   return this.op !== 0&& this.op !== 1;
+    // },
 
-    needForm() {     
-      return this.op===1;
-    },
+    // needForm() {
+    //   return this.op===1;
+    // },
 
     invalidName() {
       return this.student.name === "";
@@ -110,8 +111,8 @@ export default {
       return this.student.birthday === "";
     },
 
-    invalidBirthplace() {
-      return this.student.birthplace === "";
+    invalidBirthPlace() {
+      return this.student.birthPlace === "";
     },
 
     invalidDept() {
@@ -120,8 +121,7 @@ export default {
   },
   data() {
     return {
-      id: null,
-      tmp:null,
+      idTmp: "",
       submitting: false,
       error: false,
       success: false,
@@ -129,41 +129,66 @@ export default {
         name: "",
         sex: "",
         birthday: "",
-        birthplace: "",
+        birthPlace: "",
         dept: ""
       }
     };
   },
   methods: {
-    render(){
-      this.data=Object.assign({}, this.id);
+    render(x) {
+      // this.data=Object.assign({}, this.idTmp);
+      this.op = x;
       this.$forceUpdate();
-      console.log("form render");
+      console.log("form render,op:" + this.op);
     },
 
-    handleSubmit() {
+    handleVerify() {
       this.submitting = true;
       this.clearStatus();
       // this.tmp=this.op;
       // this.data=Object.assign(this.tmp, this.op);
       // this.$forceUpdate();
-      if (
-        this.invalidName ||
-        this.invalidSex ||
-        this.invalidBirthday ||
-        this.invalidBirthplace ||
-        this.invalidDept
-      ) {
-        this.error = true;
-        return;
+      console.info("verify");
+      if (this.op === "1") {
+        //insert
+        if (
+          this.invalidName ||
+          this.invalidSex ||
+          this.invalidBirthday ||
+          this.invalidBirthPlace ||
+          this.invalidDept
+        ) {
+          this.error = true;
+          return;
+        }
+        this.$emit("add:student", this.student);
+
+      } else {
+        
+        if (this.idTmp === "") this.$parent.getStudents();
+        else this.$parent.getOneStudent(this.idTmp);
       }
 
-      this.$emit("add:student", this.student);
+      // console.info("verify");
+      // if (this.idTmp === "") this.$parent.getStudents();
+      // else this.$parent.getOneStudent(this.idTmp);
+
+      // switch(Number(op)){
+      //   case 1:
+      //     this.$emit("add:student", this.student);
+      //     break;
+      //   case 2:
+      //     this.$emit("query:")
+
+      // }
+
+      // if (this.op === "1") this.$emit("add:student", this.student);
+
       this.student = {
         name: "",
         sex: "",
         birthday: "",
-        birthplace: "",
+        birthPlace: "",
         dept: ""
       };
       this.error = false;
