@@ -56,6 +56,9 @@
                 v-on:keypress="clearStatus"
               />
             </td>
+            <td>
+              <button>Verify</button>
+            </td>
           </tr>
           <tr>
             <p v-if="error && submitting" class="error-message">❗Please fill out all required fields</p>
@@ -63,11 +66,10 @@
           </tr>
         </div>
 
-        <tr>
+        <!-- <tr>
           <td v-if="op!=='1'">
-            <input
-              value
-              placeholder="Sno"
+            <input              
+              placeholder="Name"
               type="text"
               v-model="idTmp"
               v-on:focus="clearStatus"
@@ -78,7 +80,7 @@
             <button>Verify</button>
           </td>
           <p>idTmp:{{idTmp}},op in form:{{op}}</p>
-        </tr>
+        </tr>-->
       </table>
     </form>
   </div>
@@ -135,12 +137,12 @@ export default {
     };
   },
   methods: {
-    render(x) {
-      // this.data=Object.assign({}, this.idTmp);
-      this.op = x;
-      this.$forceUpdate();
-      console.log("form render,op:" + this.op);
-    },
+    // render(x) {
+    //   // this.data=Object.assign({}, this.idTmp);
+    //   this.op = x;
+    //   this.$forceUpdate();
+    //   console.log("form render,op:" + this.op);
+    // },
 
     handleVerify() {
       this.submitting = true;
@@ -162,12 +164,12 @@ export default {
           return;
         }
         this.$emit("add:student", this.student);
-
-      } else {
-        
-        if (this.idTmp === "") this.$parent.getStudents();
-        else this.$parent.getOneStudent(this.idTmp);
       }
+      // else {
+
+      //   if (this.idTmp === "") this.$parent.getStudents();
+      //   else this.$parent.getOneStudent(this.idTmp);
+      // }
 
       // console.info("verify");
       // if (this.idTmp === "") this.$parent.getStudents();
@@ -197,6 +199,7 @@ export default {
     },
 
     clearStatus() {
+      console.log("clr sts");
       this.success = false;
       this.error = false;
     }
